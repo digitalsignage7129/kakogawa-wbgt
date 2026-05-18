@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>加古川市 WBGT＆気象ダッシュボード</title>
     <style>
-        /* 画面全体：外側へのはみ出しを完全に禁止 */
+        /* 画面全体：外側へのはみ出しを厳格に禁止 */
         html, body {
             margin: 0;
             padding: 0;
@@ -19,7 +19,7 @@
             overflow: hidden;
         }
         
-        /* 690x728 px の絶対固定枠 */
+        /* 690x728 px の絶対固定枠（サイズを厳守） */
         .widget-box {
             width: 690px;
             max-width: 690px;
@@ -27,7 +27,7 @@
             max-height: 728px;
             background: #ffffff;
             box-sizing: border-box;
-            padding: 25px;
+            padding: 20px; /* 余白を少し縮小 */
             border-radius: 12px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             display: flex;
@@ -43,119 +43,119 @@
             justify-content: space-between;
             align-items: flex-start;
             border-bottom: 2px solid #edf2f7;
-            padding-bottom: 12px;
-            height: 55px;
+            padding-bottom: 10px;
+            height: 50px;
             box-sizing: border-box;
         }
         .header h1 {
             margin: 0;
-            font-size: 24px;
+            font-size: 22px; /* 少し小さく */
             color: #2d3748;
             font-weight: 700;
             line-height: 1.2;
         }
         .header .sub {
-            font-size: 12px;
+            font-size: 11px;
             color: #718096;
-            margin-top: 2px;
+            margin-top: 1px;
         }
         .weather-icon-txt {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: bold;
             color: #3182ce;
         }
 
-        /* メインWBGTエリア */
+        /* メインWBGTエリア（高さを少し抑えて見切れ防止） */
         .wbgt-section {
             background: #2ecc71;
             color: white;
             border-radius: 10px;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
             transition: background 0.5s ease;
-            height: 150px;
+            height: 130px; /* 150px から 130px に縮小 */
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
         .wbgt-label {
-            font-size: 14px;
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 1px;
             opacity: 0.9;
         }
         .wbgt-main {
-            font-size: 60px;
+            font-size: 52px; /* 60px から 52px に調整 */
             font-weight: 900;
-            margin: 5px 0;
+            margin: 2px 0;
             line-height: 1;
         }
         .wbgt-main span {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 500;
         }
         .wbgt-status {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             background: rgba(0,0,0,0.15);
-            padding: 4px 15px;
+            padding: 3px 12px;
             border-radius: 30px;
             display: inline-block;
-            margin-top: 5px;
+            margin-top: 3px;
         }
 
         /* 気象詳細グリッド */
         .weather-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            height: 75px;
+            gap: 10px;
+            height: 65px; /* 75px から 65px に縮小 */
             box-sizing: border-box;
         }
         .grid-item {
             background: #f7fafc;
             border: 1px solid #e2e8f0;
             border-radius: 8px;
-            padding: 10px 5px;
+            padding: 5px;
             text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
         .grid-label {
-            font-size: 12px;
+            font-size: 11px;
             color: #718096;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .grid-value {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             color: #1a202c;
         }
         .grid-value span {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
             color: #4a5568;
         }
 
-        /* 3時間ごとの予測テーブルエリア */
+        /* 3時間ごとの予測テーブルエリア（縦幅を最大に確保） */
         .forecast-section {
-            height: 290px;
-            margin: 15px 0 0 0;
+            height: 330px; /* 縦幅を広げてデータをしっかり見せる */
+            margin: 10px 0 0 0;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
         }
         .forecast-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             color: #4a5568;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .table-wrapper {
             flex-grow: 1;
-            overflow-y: auto;
+            overflow-y: auto; /* 万が一の際も中で綺麗にスクロール可能に */
         }
         .forecast-table {
             width: 100%;
@@ -172,8 +172,8 @@
             top: 0;
         }
         .forecast-table td {
-            padding: 8px 6px;
-            font-size: 13px;
+            padding: 7px 6px; /* 行の隙間をわずかに引き締め */
+            font-size: 12px;  /* 13px から 12px に縮小 */
             color: #4a5568;
             text-align: center;
             border-bottom: 1px solid #edf2f7;
@@ -181,12 +181,12 @@
 
         /* フッター */
         .footer {
-            font-size: 11px;
+            font-size: 10px;
             color: #a0aec0;
             text-align: center;
             border-top: 1px solid #edf2f7;
-            padding-top: 8px;
-            height: 25px;
+            padding-top: 6px;
+            height: 20px;
             box-sizing: border-box;
         }
     </style>
@@ -338,7 +338,7 @@ async function updateDashboard() {
 
         let rowCount = 0;
         for (let i = currentIndex; i < hourly.time.length; i++) {
-            if (rowCount >= 6) break;
+            if (rowCount >= 7) break; // 表示行数を微調整して隙間にフィット
             if ((i - currentIndex) % 3 !== 0) continue;
 
             const fTime = new Date(hourly.time[i]);
