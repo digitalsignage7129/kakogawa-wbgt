@@ -19,135 +19,143 @@
             align-items: center;
         }
         
-        /* 表示器が拡大処理をしていても、画面内に強制縮小フィットさせる魔法の枠 */
+        /* 全体枠：上下左右の無駄な余白を無くし、縦いっぱいに使う */
         .widget-box {
             width: 100vw;
             height: 100vh;
-            max-width: 690px;  /* 本来の理想サイズ */
-            max-height: 728px; /* 本来の理想サイズ */
+            max-width: 690px;
+            max-height: 728px;
             background: #ffffff;
             box-sizing: border-box;
-            padding: 2vh 2vw;  /* 画面の高さ・幅に比例した余白 */
+            padding: 3vh 3vw;  /* 余白を均等に確保 */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden !important;
         }
 
-        /* 各パーツの高さもパーセンテージ（vh）にして絶対に縦伸びさせない */
+        /* ヘッダーエリア */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid #edf2f7;
-            height: 7vh; 
-            max-height: 50px;
+            height: 8vh; 
             box-sizing: border-box;
         }
         .header h1 {
             margin: 0;
-            font-size: 3.2vw; /* 画面幅に合わせて文字も自動縮小 */
-            max-font-size: 20px;
+            font-size: 3.8vw; /* 文字サイズを少しアップ */
+            max-font-size: 24px;
             color: #2d3748;
             font-weight: 700;
         }
         .header .sub {
-            font-size: 1.8vw;
-            max-font-size: 11px;
+            font-size: 2vw;
+            max-font-size: 12px;
             color: #718096;
         }
         .weather-icon-txt {
-            font-size: 4vw;
-            max-font-size: 24px;
+            font-size: 4.5vw;
+            max-font-size: 28px;
             font-weight: bold;
             color: #3182ce;
         }
 
-        /* メインWBGTエリア */
+        /* 🔥 メインWBGTエリア：縦幅を大幅に拡大して超強調 */
         .wbgt-section {
             background: #2ecc71;
             color: white;
-            border-radius: 8px;
-            padding: 1.5vh;
+            border-radius: 12px;
+            padding: 2vh;
             text-align: center;
-            height: 16vh;
-            max-height: 115px;
+            height: 26vh; /* 16vh から 26vh に超大幅拡大 */
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
         }
         .wbgt-label {
-            font-size: 2vw;
-            max-font-size: 12px;
-            opacity: 0.9;
+            font-size: 2.2vw;
+            max-font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            opacity: 0.95;
+            margin-bottom: 5px;
         }
         .wbgt-main {
-            font-size: 7vw;
-            max-font-size: 44px;
+            font-size: 12.5vw; /* 数字を圧倒的に巨大化 */
+            max-font-size: 80px; 
             font-weight: 900;
             margin: 0;
-            line-height: 1.1;
+            line-height: 1;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .wbgt-main span {
-            font-size: 3vw;
-            max-font-size: 20px;
+            font-size: 5vw;
+            max-font-size: 32px;
+            margin-left: 2px;
         }
         .wbgt-status {
-            font-size: 2.5vw;
-            max-font-size: 15px;
-            font-weight: 700;
-            background: rgba(0,0,0,0.15);
-            padding: 2px 10px;
+            font-size: 3.2vw; /* ステータス文字も拡大 */
+            max-font-size: 20px;
+            font-weight: bold;
+            background: rgba(0,0,0,0.2);
+            padding: 4px 18px;
             border-radius: 30px;
             display: inline-block;
-            margin-top: 2px;
+            margin-top: 8px;
+            align-self: center;
         }
 
         /* 気象詳細グリッド */
         .weather-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 1vw;
-            height: 8vh;
-            max-height: 55px;
+            gap: 1.2vw;
+            height: 9vh;
             box-sizing: border-box;
+            margin-top: 1vh;
         }
         .grid-item {
             background: #f7fafc;
             border: 1px solid #e2e8f0;
-            border-radius: 6px;
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             text-align: center;
+            padding: 4px 0;
         }
         .grid-label {
-            font-size: 1.8vw;
-            max-font-size: 11px;
+            font-size: 2vw;
+            max-font-size: 12px;
             color: #718096;
+            margin-bottom: 2px;
         }
         .grid-value {
-            font-size: 2.5vw;
-            max-font-size: 15px;
+            font-size: 2.8vw;
+            max-font-size: 18px;
             font-weight: 700;
             color: #1a202c;
         }
 
-        /* 3時間ごとの予測テーブルエリア */
+        /* 3時間ごとの予測テーブルエリア：余白を埋めるため縦幅を調整 */
         .forecast-section {
-            height: 55vh; /* 画面の下半分に絶対収める */
+            height: 43vh; /* 下部の空間をきれいに埋めるサイズ */
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             overflow: hidden !important;
+            margin-top: 1.5vh;
         }
         .forecast-title {
-            font-size: 2vw;
-            max-font-size: 12px;
+            font-size: 2.2vw;
+            max-font-size: 13px;
             font-weight: 700;
             color: #4a5568;
-            margin-bottom: 2px;
+            margin-bottom: 5px;
         }
         .table-wrapper {
             flex-grow: 1;
@@ -160,15 +168,15 @@
         .forecast-table th {
             background: #f7fafc;
             color: #718096;
-            font-size: 1.8vw;
-            max-font-size: 11px;
-            padding: 4px 2px;
+            font-size: 2vw;
+            max-font-size: 12px;
+            padding: 6px 2px;
             border-bottom: 2px solid #e2e8f0;
         }
         .forecast-table td {
-            padding: 0.6vh 2px; /* 画面の高さに合わせて行間を自動で超圧縮 */
-            font-size: 1.8vw;
-            max-font-size: 11px;
+            padding: 1vh 2px; /* 行間を広げて見やすく、余白を消費 */
+            font-size: 2vw;
+            max-font-size: 12px;
             color: #4a5568;
             text-align: center;
             border-bottom: 1px solid #edf2f7;
@@ -176,12 +184,12 @@
 
         /* フッター */
         .footer {
-            font-size: 1.6vw;
-            max-font-size: 10px;
+            font-size: 1.8vw;
+            max-font-size: 11px;
             color: #a0aec0;
             text-align: center;
             border-top: 1px solid #edf2f7;
-            height: 3vh;
+            height: 4vh;
             box-sizing: border-box;
             display: flex;
             align-items: center;
@@ -196,14 +204,14 @@
     <div class="header">
         <div>
             <h1>加古川市 気象ポータル</h1>
-            <div class="sub">ピンポイント観測</div>
+            <div class="sub">ピンポイント観測情報</div>
         </div>
         <div id="weather-text" class="weather-icon-txt">--</div>
     </div>
 
-    <!-- メイン暑さ指数 -->
+    <!-- メイン暑さ指数（大強調） -->
     <div class="wbgt-section" id="wbgt-card">
-        <div class="wbgt-label" id="time-label">暑さ指数 (WBGT)</div>
+        <div class="wbgt-label" id="time-label">現在の暑さ指数 (WBGT)</div>
         <div class="wbgt-main"><span id="wbgt-num">--.-</span><span>℃</span></div>
         <div class="wbgt-status" id="wbgt-status">取得中...</div>
     </div>
@@ -230,7 +238,7 @@
 
     <!-- 今後のタイムライン予測 -->
     <div class="forecast-section">
-        <div class="forecast-title">⏰ 今後の気象・WBGT予測</div>
+        <div class="forecast-title">⏰ 今後の気象・WBGT予測 (3時間ごと)</div>
         <div class="table-wrapper">
             <table class="forecast-table">
                 <thead>
@@ -252,7 +260,7 @@
 
     <!-- フッター -->
     <div class="footer" id="update-time">
-        Open-Meteo自動更新
+        Open-Meteo 自動更新
     </div>
 </div>
 
@@ -286,7 +294,6 @@ function calcWbgt(temp, humidity) {
     return 0.725 * temp + 0.0368 * humidity + 0.00315 * temp * humidity - 3.2;
 }
 
-// 端末ごとのフォント自動調整の補正
 function adjustForDevice() {
     const el = document.querySelectorAll('.header h1, .header .sub, .weather-icon-txt, .wbgt-label, .wbgt-main, .wbgt-status, .grid-label, .grid-value, .forecast-title, .forecast-table th, .forecast-table td, .footer');
     el.forEach(e => {
@@ -343,14 +350,14 @@ async function updateDashboard() {
         statusEl.innerText = level.text;
 
         const timeObj = new Date(hourly.time[currentIndex]);
-        document.getElementById('time-label').innerText = `現在（${timeObj.getHours()}:00）のWBGT`;
+        document.getElementById('time-label').innerText = `現在（${timeObj.getHours()}:00）の暑さ指数`;
 
         const tbody = document.getElementById('forecast-tbody');
         tbody.innerHTML = '';
 
         let rowCount = 0;
         for (let i = currentIndex; i < hourly.time.length; i++) {
-            if (rowCount >= 6) break; // 表示行数を6行に絞ってさらに高さを確保
+            if (rowCount >= 6) break; // テーブルは綺麗に収まる6行で固定
             if ((i - currentIndex) % 3 !== 0) continue;
 
             const fTime = new Date(hourly.time[i]);
