@@ -19,7 +19,7 @@
             align-items: center;
         }
         
-        /* 全体枠：上下左右の無駄な余白を無くし、縦いっぱいに使う */
+        /* 全体枠 */
         .widget-box {
             width: 100vw;
             height: 100vh;
@@ -27,7 +27,7 @@
             max-height: 728px;
             background: #ffffff;
             box-sizing: border-box;
-            padding: 3vh 3vw;  /* 余白を均等に確保 */
+            padding: 3vh 3vw;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -45,7 +45,7 @@
         }
         .header h1 {
             margin: 0;
-            font-size: 3.8vw; /* 文字サイズを少しアップ */
+            font-size: 3.8vw;
             max-font-size: 24px;
             color: #2d3748;
             font-weight: 700;
@@ -62,14 +62,14 @@
             color: #3182ce;
         }
 
-        /* 🔥 メインWBGTエリア：縦幅を大幅に拡大して超強調 */
+        /* メインWBGTエリア */
         .wbgt-section {
             background: #2ecc71;
             color: white;
             border-radius: 12px;
-            padding: 2vh;
+            padding: 1.5vh;
             text-align: center;
-            height: 26vh; /* 16vh から 26vh に超大幅拡大 */
+            height: 28vh; /* 数値拡大に合わせて高さをわずかに拡張 */
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -82,30 +82,36 @@
             font-weight: bold;
             letter-spacing: 1px;
             opacity: 0.95;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
         }
+        
+        /* 🔥 【最重要】数値を限界まで巨大化 */
         .wbgt-main {
-            font-size: 12.5vw; /* 数字を圧倒的に巨大化 */
-            max-font-size: 80px; 
+            font-size: 17vw; /* 12.5vw から 17vw に超巨大化！ */
+            max-font-size: 110px; /* 最大サイズを80pxから110pxへ引き上げ */
             font-weight: 900;
             margin: 0;
-            line-height: 1;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            line-height: 0.95;
+            text-shadow: 0 3px 6px rgba(0,0,0,0.15);
+            letter-spacing: -2px; /* 数字の間隔を詰めて視認性アップ */
         }
+        /* 🔥 「℃」の単位も合わせて大きく強調 */
         .wbgt-main span {
-            font-size: 5vw;
-            max-font-size: 32px;
-            margin-left: 2px;
+            font-size: 7vw; /* 5vw から 7vw に拡大！ */
+            max-font-size: 45px; /* 最大サイズを32pxから45pxへ引き上げ */
+            margin-left: 4px;
+            font-weight: 700;
         }
+        
         .wbgt-status {
-            font-size: 3.2vw; /* ステータス文字も拡大 */
+            font-size: 3.2vw;
             max-font-size: 20px;
             font-weight: bold;
             background: rgba(0,0,0,0.2);
             padding: 4px 18px;
             border-radius: 30px;
             display: inline-block;
-            margin-top: 8px;
+            margin-top: 6px;
             align-self: center;
         }
 
@@ -141,9 +147,9 @@
             color: #1a202c;
         }
 
-        /* 3時間ごとの予測テーブルエリア：余白を埋めるため縦幅を調整 */
+        /* 3時間ごとの予測テーブルエリア */
         .forecast-section {
-            height: 43vh; /* 下部の空間をきれいに埋めるサイズ */
+            height: 41vh; /* 上部が大きくなった分、1〜2%だけ縦幅を調整 */
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -174,7 +180,7 @@
             border-bottom: 2px solid #e2e8f0;
         }
         .forecast-table td {
-            padding: 1vh 2px; /* 行間を広げて見やすく、余白を消費 */
+            padding: 0.9vh 2px; 
             font-size: 2vw;
             max-font-size: 12px;
             color: #4a5568;
@@ -209,7 +215,7 @@
         <div id="weather-text" class="weather-icon-txt">--</div>
     </div>
 
-    <!-- メイン暑さ指数（大強調） -->
+    <!-- メイン暑さ指数（数値をさらに超巨大化） -->
     <div class="wbgt-section" id="wbgt-card">
         <div class="wbgt-label" id="time-label">現在の暑さ指数 (WBGT)</div>
         <div class="wbgt-main"><span id="wbgt-num">--.-</span><span>℃</span></div>
@@ -357,7 +363,7 @@ async function updateDashboard() {
 
         let rowCount = 0;
         for (let i = currentIndex; i < hourly.time.length; i++) {
-            if (rowCount >= 6) break; // テーブルは綺麗に収まる6行で固定
+            if (rowCount >= 6) break;
             if ((i - currentIndex) % 3 !== 0) continue;
 
             const fTime = new Date(hourly.time[i]);
