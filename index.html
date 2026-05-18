@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加古川市周辺（姫路） WBGT暑さ指数</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --wbgt-color: #2ecc71;
+            --wbgt-text: "ほぼ安全";
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 24px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+        .location {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 24px;
+        }
+        .wbgt-box {
+            background-color: var(--wbgt-color);
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            transition: all 0.5s ease;
+        }
+        .wbgt-value {
+            font-size: 3.5rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+        .wbgt-unit {
+            font-size: 1.5rem;
+        }
+        .wbgt-status {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+        .update-time {
+            font-size: 0.8rem;
+            color: #95a5a6;
+            margin-top: 12px;
+        }
+        .forecast-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        .forecast-table th, .forecast-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eeeeee;
+            font-size: 0.9rem;
+        }
+        .loading {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            padding: 40px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>加古川市周辺の暑さ指数</h1>
+    <div class="location">データ光源: 環境省 暑さ指数予測値（姫路地点）</div>
+
+    <div id="loading-view" class="loading">最新のデータを読み込み中...</div>
+
+    <div id="main-view" style="display: none;">
+        <div class="wbgt-box" id="level-card">
+            <div id="current-time-label" style="font-size: 0.9rem; opacity: 0.9;">現在の予測値</div>
+            <div class="wbgt-value"><span id="wbgt-num">--.-</span><span class="wbgt-unit">℃</span></div>
+            <div class="wbgt-status" id="wbgt-status-text">取得中</div>
+        </div>
+        
+        <div class="update-time" id="sync-time">データ更新時刻: --:--</div>
+
+        ### 今後の予測（3時間ごと）
+        <table class="forecast-table">
+            <thead>
+                <tr>
+                    <th>日時</th>
+                    <th>予測WBGT</th>
+                </tr>
+            </thead>
+            <tbody id="forecast-body">
+                <!-- ここにJavaScriptで予測データが追加されます -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+// 環境省の姫路地点(63171)の予測値CSVのURL
+// ※CORS回避のため、パブリックなCORSプロキシを経由させています
+const csvUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent('https://www.wbgt.env.go.jp/prev15WG/dl/yohou_63171.csv');
+
+function getWbgtLevel(value) {
+    const v = parseFloat(value);
+    if (v >= 31) return { color: '#e74c3c', text: '危険（運動は原則中止）' };
+    if (v >= 28) return { color: '#e67e22', text: '厳重警戒（激しい運動は中止）' };
+    if (v >= 25) return { color: '#f1c40f', text: '警戒（積極的な水分補給）' };
+    if (v >= 21) return { color: '#3498db', text: '注意' };
+    return { color: '#2ecc71', text: 'ほぼ安全' };
+}
+
+async function fetchWBGT() {
+    try {
+        const response = await fetch(csvUrl);
+        if (!response.ok) throw new Error('ネットワークエラー');
+        const text = await response.text();
+        
+        // CSVのパース処理
+        const lines = text.split('\n').map(line => line.split(','));
+        
+        // 環境省CSV形式: 1行目ダウンロード時刻、3行目日時ヘッダー、4行目データ
+        if (lines.length < 4) throw new Error('データ形式が不正です');
+        
+        const updateInfo = lines[0][0] || '不明';
+        const headers = lines[2]; // 日時 (例: 2026051806)
+        const data = lines[3];    // WBGT値
+        
+        document.getElementById('sync-time').innerText = `環境省配信：${updateInfo}`;
+        
+        const forecastBody = document.getElementById('forecast-body');
+        forecastBody.innerHTML = '';
+        
+        let currentWbgt = null;
+        let isFirst = true;
+
+        // 3列目(インデックス2)からデータが始まります
+        for (let i = 2; i < headers.length; i++) {
+            const rawTime = headers[i];
+            const wbgtVal = data[i];
+            
+            if (!rawTime || !wbgtVal || isNaN(wbgtVal)) continue;
+            
+            // 日時の整形 (YYYYMMDDHH -> MM/DD HH:00)
+            const month = rawTime.substring(4, 6);
+            const day = rawTime.substring(6, 8);
+            const hour = rawTime.substring(8, 10);
+            const formattedTime = `${parseInt(month)}/${parseInt(day)} ${hour}:00`;
+            
+            // 最初のデータを「現在の予測」としてピックアップ
+            if (isFirst) {
+                currentWbgt = wbgtVal;
+                isFirst = false;
+                
+                document.getElementById('wbgt-num').innerText = parseFloat(wbgtVal).toFixed(1);
+                const level = getWbgtLevel(wbgtVal);
+                const card = document.getElementById('level-card');
+                card.style.backgroundColor = level.color;
+                document.getElementById('wbgt-status-text').innerText = level.text;
+                document.getElementById('current-time-label').innerText = `直近の予測 (${formattedTime})`;
+            }
+            
+            // 予測テーブル行の追加
+            const row = document.createElement('tr');
+            const level = getWbgtLevel(wbgtVal);
+            row.innerHTML = `
+                <td>${formattedTime}</td>
+                <td style="font-weight:bold; color:${level.color}">${parseFloat(wbgtVal).toFixed(1)} ℃</td>
+            `;
+            forecastBody.appendChild(row);
+        }
+        
+        // 表示の切り替え
+        document.getElementById('loading-view').style.display = 'none';
+        document.getElementById('main-view').style.display = 'block';
+        
+    } catch (error) {
+        console.error(error);
+        document.getElementById('loading-view').innerText = 'データの取得に失敗しました。時間をおいて再度お試しください。';
+    }
+}
+
+// 起動時に実行
+fetchWBGT();
+</script>
+
+</body>
+</html>
