@@ -5,87 +5,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>加古川市 WBGT＆気象ダッシュボード</title>
     <style>
-        /* 画面全体：スクロールを完全に禁止し、はみ出しをカット */
+        /* 画面全体：表示器の画面サイズを100%基準にする */
         html, body {
             margin: 0;
             padding: 0;
-            width: 690px;
-            height: 728px;
+            width: 100vw;
+            height: 100vh;
             background-color: #f4f6f9;
             font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif;
             overflow: hidden !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
-        /* 690x728 px の絶対固定枠（縦に絶対伸びない設定） */
+        /* 表示器が拡大処理をしていても、画面内に強制縮小フィットさせる魔法の枠 */
         .widget-box {
-            width: 690px;
-            height: 728px;
+            width: 100vw;
+            height: 100vh;
+            max-width: 690px;  /* 本来の理想サイズ */
+            max-height: 728px; /* 本来の理想サイズ */
             background: #ffffff;
             box-sizing: border-box;
-            padding: 15px; /* 余白をさらにタイトに */
+            padding: 2vh 2vw;  /* 画面の高さ・幅に比例した余白 */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden !important;
         }
 
-        /* ヘッダーエリア */
+        /* 各パーツの高さもパーセンテージ（vh）にして絶対に縦伸びさせない */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid #edf2f7;
-            padding-bottom: 6px;
-            height: 45px;
+            height: 7vh; 
+            max-height: 50px;
             box-sizing: border-box;
         }
         .header h1 {
             margin: 0;
-            font-size: 20px; /* サイズダウン */
+            font-size: 3.2vw; /* 画面幅に合わせて文字も自動縮小 */
+            max-font-size: 20px;
             color: #2d3748;
             font-weight: 700;
         }
         .header .sub {
-            font-size: 11px;
+            font-size: 1.8vw;
+            max-font-size: 11px;
             color: #718096;
-            margin-top: 1px;
         }
         .weather-icon-txt {
-            font-size: 22px;
+            font-size: 4vw;
+            max-font-size: 24px;
             font-weight: bold;
             color: #3182ce;
         }
 
-        /* メインWBGTエリア（高さをさらに圧縮） */
+        /* メインWBGTエリア */
         .wbgt-section {
             background: #2ecc71;
             color: white;
             border-radius: 8px;
-            padding: 10px;
+            padding: 1.5vh;
             text-align: center;
-            transition: background 0.5s ease;
-            height: 115px; /* 130px から 115px に圧縮 */
+            height: 16vh;
+            max-height: 115px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
         .wbgt-label {
-            font-size: 12px;
-            letter-spacing: 1px;
+            font-size: 2vw;
+            max-font-size: 12px;
             opacity: 0.9;
         }
         .wbgt-main {
-            font-size: 44px; /* 52px から 44px に縮小 */
+            font-size: 7vw;
+            max-font-size: 44px;
             font-weight: 900;
             margin: 0;
             line-height: 1.1;
         }
         .wbgt-main span {
-            font-size: 20px;
+            font-size: 3vw;
+            max-font-size: 20px;
         }
         .wbgt-status {
-            font-size: 16px;
+            font-size: 2.5vw;
+            max-font-size: 15px;
             font-weight: 700;
             background: rgba(0,0,0,0.15);
             padding: 2px 10px;
@@ -94,57 +104,54 @@
             margin-top: 2px;
         }
 
-        /* 気象詳細グリッド（高さを圧縮） */
+        /* 気象詳細グリッド */
         .weather-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            height: 55px; /* 65px から 55px に圧縮 */
+            gap: 1vw;
+            height: 8vh;
+            max-height: 55px;
             box-sizing: border-box;
         }
         .grid-item {
             background: #f7fafc;
             border: 1px solid #e2e8f0;
             border-radius: 6px;
-            padding: 2px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             text-align: center;
         }
         .grid-label {
-            font-size: 11px;
+            font-size: 1.8vw;
+            max-font-size: 11px;
             color: #718096;
-            margin-bottom: 1px;
         }
         .grid-value {
-            font-size: 15px;
+            font-size: 2.5vw;
+            max-font-size: 15px;
             font-weight: 700;
             color: #1a202c;
         }
-        .grid-value span {
-            font-size: 10px;
-            color: #4a5568;
-        }
 
-        /* 3時間ごとの予測テーブルエリア（絶対に見切れない高さに固定） */
+        /* 3時間ごとの予測テーブルエリア */
         .forecast-section {
-            height: 395px; /* テーブルの表示可能域を限界まで拡大 */
-            margin: 5px 0 0 0;
+            height: 55vh; /* 画面の下半分に絶対収める */
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             overflow: hidden !important;
         }
         .forecast-title {
-            font-size: 12px;
+            font-size: 2vw;
+            max-font-size: 12px;
             font-weight: 700;
             color: #4a5568;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .table-wrapper {
             flex-grow: 1;
-            overflow: hidden !important; /* スクロールバー自体を非表示に */
+            overflow: hidden !important;
         }
         .forecast-table {
             width: 100%;
@@ -153,29 +160,32 @@
         .forecast-table th {
             background: #f7fafc;
             color: #718096;
-            font-size: 11px;
-            padding: 4px;
-            text-align: center;
+            font-size: 1.8vw;
+            max-font-size: 11px;
+            padding: 4px 2px;
             border-bottom: 2px solid #e2e8f0;
         }
         .forecast-table td {
-            padding: 5px 4px; /* 行間を限界まで詰める */
-            font-size: 11px;  /* 文字を小さく */
+            padding: 0.6vh 2px; /* 画面の高さに合わせて行間を自動で超圧縮 */
+            font-size: 1.8vw;
+            max-font-size: 11px;
             color: #4a5568;
             text-align: center;
             border-bottom: 1px solid #edf2f7;
-            line-height: 1.2;
         }
 
         /* フッター */
         .footer {
-            font-size: 10px;
+            font-size: 1.6vw;
+            max-font-size: 10px;
             color: #a0aec0;
             text-align: center;
             border-top: 1px solid #edf2f7;
-            padding-top: 4px;
-            height: 18px;
+            height: 3vh;
             box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
@@ -186,41 +196,41 @@
     <div class="header">
         <div>
             <h1>加古川市 気象ポータル</h1>
-            <div class="sub">ピンポイント観測（北緯34.76 東経134.84）</div>
+            <div class="sub">ピンポイント観測</div>
         </div>
         <div id="weather-text" class="weather-icon-txt">--</div>
     </div>
 
     <!-- メイン暑さ指数 -->
     <div class="wbgt-section" id="wbgt-card">
-        <div class="wbgt-label" id="time-label">直近の暑さ指数 (WBGT)</div>
+        <div class="wbgt-label" id="time-label">暑さ指数 (WBGT)</div>
         <div class="wbgt-main"><span id="wbgt-num">--.-</span><span>℃</span></div>
-        <div class="wbgt-status" id="wbgt-status">データ取得中...</div>
+        <div class="wbgt-status" id="wbgt-status">取得中...</div>
     </div>
 
     <!-- 4大気象要素データ -->
     <div class="weather-grid">
         <div class="grid-item">
             <div class="grid-label">気温</div>
-            <div class="grid-value" id="cur-temp">--.-<span>℃</span></div>
+            <div class="grid-value" id="cur-temp">--.-℃</div>
         </div>
         <div class="grid-item">
             <div class="grid-label">湿度</div>
-            <div class="grid-value" id="cur-humidity">--<span>%</span></div>
+            <div class="grid-value" id="cur-humidity">--%</div>
         </div>
         <div class="grid-item">
             <div class="grid-label">風速</div>
-            <div class="grid-value" id="cur-wind">--.-<span>m/s</span></div>
+            <div class="grid-value" id="cur-wind">--.-m/s</div>
         </div>
         <div class="grid-item">
-            <div class="grid-label">降水確率</div>
-            <div class="grid-value" id="cur-pop">--<span>%</span></div>
+            <div class="grid-label">降水</div>
+            <div class="grid-value" id="cur-pop">--%</div>
         </div>
     </div>
 
     <!-- 今後のタイムライン予測 -->
     <div class="forecast-section">
-        <div class="forecast-title">⏰ 今後の気象・暑さ指数予測</div>
+        <div class="forecast-title">⏰ 今後の気象・WBGT予測</div>
         <div class="table-wrapper">
             <table class="forecast-table">
                 <thead>
@@ -230,7 +240,7 @@
                         <th>気温</th>
                         <th>湿度</th>
                         <th>風速</th>
-                        <th>暑さ指数</th>
+                        <th>WBGT</th>
                     </tr>
                 </thead>
                 <tbody id="forecast-tbody">
@@ -242,7 +252,7 @@
 
     <!-- フッター -->
     <div class="footer" id="update-time">
-        データ元: 気象庁仕様パブリックデータ (Open-Meteo)
+        Open-Meteo自動更新
     </div>
 </div>
 
@@ -252,15 +262,15 @@ const lon = 134.8404;
 const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,precipitation_probability&timezone=Asia%2FTokyo&forecast_days=2`;
 
 function getWeatherText(code) {
-    if (code === 0) return "☀️ 晴れ";
-    if (code === 1 || code === 2 || code === 3) return "⛅ 晴れ時々曇";
-    if (code === 45 || code === 48) return "🌫️ 霧";
-    if (code === 51 || code === 53 || code === 55) return "🌧️ 小雨";
-    if (code === 61 || code === 63 || code === 65) return "☔ 雨";
-    if (code === 71 || code === 73 || code === 75) return "❄️ 雪";
-    if (code === 80 || code === 81 || code === 82) return "🌦️ にわか雨";
-    if (code === 95 || code === 96) return "⚡ 雷雨";
-    return "☁️ 曇り";
+    if (code === 0) return "☀️晴";
+    if (code === 1 || code === 2 || code === 3) return "⛅晴曇";
+    if (code === 45 || code === 48) return "🌫️霧";
+    if (code === 51 || code === 53 || code === 55) return "🌧️小雨";
+    if (code === 61 || code === 63 || code === 65) return "☔雨";
+    if (code === 71 || code === 73 || code === 75) return "❄️雪";
+    if (code === 80 || code === 81 || code === 82) return "🌦️雨";
+    if (code === 95 || code === 96) return "⚡雷雨";
+    return "☁️曇";
 }
 
 function getWbgtLevel(value) {
@@ -274,6 +284,20 @@ function getWbgtLevel(value) {
 
 function calcWbgt(temp, humidity) {
     return 0.725 * temp + 0.0368 * humidity + 0.00315 * temp * humidity - 3.2;
+}
+
+// 端末ごとのフォント自動調整の補正
+function adjustForDevice() {
+    const el = document.querySelectorAll('.header h1, .header .sub, .weather-icon-txt, .wbgt-label, .wbgt-main, .wbgt-status, .grid-label, .grid-value, .forecast-title, .forecast-table th, .forecast-table td, .footer');
+    el.forEach(e => {
+        const max = e.getAttribute('max-font-size');
+        if (max) {
+            const current = parseFloat(window.getComputedStyle(e).fontSize);
+            if (current > parseFloat(max)) {
+                e.style.fontSize = max;
+            }
+        }
+    });
 }
 
 async function updateDashboard() {
@@ -307,26 +331,26 @@ async function updateDashboard() {
         const curWbgt = calcWbgt(curTemp, curHumidity).toFixed(1);
         const curWeather = getWeatherText(hourly.weather_code[currentIndex]);
 
-        document.getElementById('weather-text').innerText = curWeather.split(' ')[0];
+        document.getElementById('weather-text').innerText = curWeather.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD00-\uDFFF]/g, '');
         document.getElementById('wbgt-num').innerText = curWbgt;
-        document.getElementById('cur-temp').innerHTML = `${curTemp.toFixed(1)}<span>℃</span>`;
-        document.getElementById('cur-humidity').innerHTML = `${curHumidity}<span>%</span>`;
-        document.getElementById('cur-wind').innerHTML = `${curWind}<span>m/s</span>`;
-        document.getElementById('cur-pop').innerHTML = `${curPop}<span>%</span>`;
+        document.getElementById('cur-temp').innerText = `${curTemp.toFixed(1)}℃`;
+        document.getElementById('cur-humidity').innerText = `${curHumidity}%`;
+        document.getElementById('cur-wind').innerText = `${curWind}m/s`;
+        document.getElementById('cur-pop').innerText = `${curPop}%`;
 
         const level = getWbgtLevel(curWbgt);
         document.getElementById('wbgt-card').style.backgroundColor = level.color;
         statusEl.innerText = level.text;
 
         const timeObj = new Date(hourly.time[currentIndex]);
-        document.getElementById('time-label').innerText = `直近（${timeObj.getHours()}:00）のWBGT予測`;
+        document.getElementById('time-label').innerText = `現在（${timeObj.getHours()}:00）のWBGT`;
 
         const tbody = document.getElementById('forecast-tbody');
         tbody.innerHTML = '';
 
         let rowCount = 0;
         for (let i = currentIndex; i < hourly.time.length; i++) {
-            if (rowCount >= 10) break; // 行数を10行まで増やし、文字サイズ縮小と合わせて確実に枠内に収める
+            if (rowCount >= 6) break; // 表示行数を6行に絞ってさらに高さを確保
             if ((i - currentIndex) % 3 !== 0) continue;
 
             const fTime = new Date(hourly.time[i]);
@@ -339,11 +363,11 @@ async function updateDashboard() {
 
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${fTime.getDate()}日 ${fTime.getHours()}:00</td>
+                <td>${fTime.getDate()}日${fTime.getHours()}時</td>
                 <td>${fWeather}</td>
                 <td>${fTemp.toFixed(1)}℃</td>
                 <td>${fHum}%</td>
-                <td>${fWind}m/s</td>
+                <td>${fWind}m</td>
                 <td style="font-weight:bold; color:${fLevel.color}">${fWbgt}℃</td>
             `;
             tbody.appendChild(row);
@@ -351,15 +375,18 @@ async function updateDashboard() {
         }
 
         const rightNow = new Date();
-        document.getElementById('update-time').innerText = `同期: ${rightNow.getMonth()+1}/${rightNow.getDate()} ${rightNow.getHours()}:${String(rightNow.getMinutes()).padStart(2,'0')} | 加古川市`;
+        document.getElementById('update-time').innerText = `同期: ${rightNow.getMonth()+1}/${rightNow.getDate()} ${rightNow.getHours()}:${String(rightNow.getMinutes()).padStart(2,'0')}`;
+        
+        adjustForDevice();
 
     } catch (e) {
-        statusEl.innerText = "接続再試行中...";
+        statusEl.innerText = "再試行中...";
         setTimeout(updateDashboard, 5000);
     }
 }
 
 updateDashboard();
+window.addEventListener('resize', adjustForDevice);
 setInterval(updateDashboard, 600000);
 </script>
 
