@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>和歌山市 WBGTダッシュボード</title>
+    <title>加古川市 WBGTダッシュボード</title>
     <style>
         html, body {
             margin: 0;
@@ -40,12 +40,12 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 4px solid #edf2f7;
-            height: 10%;
+            height: 10%; /* 全体の10% */
             min-height: 50px;
         }
         .header h1 {
             margin: 0;
-            font-size: 4.2vh;
+            font-size: 4.2vh; /* 画面の高さ基準 */
             color: #2d3748;
             font-weight: 900;
             line-height: 1.1;
@@ -67,22 +67,22 @@
             color: white;
             border-radius: 20px;
             text-align: center;
-            height: 55%;
+            height: 55%; /* 全体の55%をしっかり確保 */
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            justify-content: space-around;
+            justify-content: space-around; /* 縦に綺麗に分散配置 */
             padding: 2vh 0;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         .wbgt-label {
-            font-size: 3.2vh;
+            font-size: 3.2vh; /* 画面に合わせて縮む */
             font-weight: bold;
             letter-spacing: 1px;
             margin: 0;
         }
         
-        /* 🔥 画面の縦幅に100%連動する超巨大数値 */
+        /* 🔥 画面の縦幅に100%連動する超巨大数値（はみ出さない上限を設定） */
         .wbgt-main-force {
             font-size: 20vh !important; 
             font-weight: 900 !important;
@@ -108,12 +108,12 @@
             margin: 0;
         }
 
-        /* 気象グリッド */
+        /* 気象グリッド（ここが見切れていたので高さを％指定に） */
         .weather-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 2vw;
-            height: 18%;
+            height: 18%; /* 全体の18% */
         }
         .grid-item {
             background: #f7fafc;
@@ -142,7 +142,7 @@
             color: #a0aec0;
             text-align: center;
             border-top: 3px solid #edf2f7;
-            height: 6%;
+            height: 6%; /* 全体の6% */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -155,8 +155,8 @@
 <div class="widget-box">
     <div class="header">
         <div>
-            <h1>和歌山市 気象ポータル</h1>
-            <div class="sub">和歌山 湊 観測情報</div>
+            <h1>加古川市 気象ポータル</h1>
+            <div class="sub">ピンポイント観測情報</div>
         </div>
         <div id="weather-text" class="weather-icon-txt">--</div>
     </div>
@@ -178,8 +178,8 @@
 </div>
 
 <script>
-const lat = 34.2285;
-const lon = 135.1378;
+const lat = 34.7649;
+const lon = 134.8404;
 const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,precipitation_probability&timezone=Asia%2FTokyo&forecast_days=1`;
 
 function getWeatherText(code) {
