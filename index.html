@@ -22,7 +22,7 @@
             height: 728px;
             background: #ffffff;
             box-sizing: border-box;
-            padding: 15px 25px; /* 上下の余白を削って文字スペースを確保 */
+            padding: 10px 25px; /* 上下余白をさらに10pxに縮小 */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -33,21 +33,21 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 5px solid #edf2f7;
-            height: 75px; 
+            height: 65px; /* 75pxから65pxにスリム化 */
         }
         .header h1 {
             margin: 0;
-            font-size: 38px; /* さらに拡大 */
+            font-size: 36px;
             color: #2d3748;
             font-weight: 900;
         }
         .header .sub {
-            font-size: 18px; /* さらに拡大 */
+            font-size: 16px;
             color: #718096;
             font-weight: bold;
         }
         .weather-icon-txt {
-            font-size: 46px; /* さらに拡大 */
+            font-size: 42px;
             font-weight: 900;
             color: #3182ce;
         }
@@ -58,51 +58,54 @@
             color: white;
             border-radius: 24px;
             text-align: center;
-            height: 410px; /* 縦幅をさらに拡大 */
+            height: 380px; /* 410pxから380pxに見切れ対策調整 */
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             justify-content: center;
             box-shadow: 0 12px 30px rgba(0,0,0,0.15);
             margin: 5px 0;
+            overflow: hidden !important;
         }
         .wbgt-label {
-            font-size: 28px; /* さらに拡大 */
+            font-size: 26px;
             font-weight: bold;
             letter-spacing: 2px;
+            margin-top: 5px;
         }
         
-        /* 🔥 限界突破：200pxの超ド級巨大数値 */
+        /* 🔥 200pxを維持したまま、行高さを0.85にして縦の隙間を完全抹殺 */
         .wbgt-main-force {
             font-size: 200px !important; 
             font-weight: 900 !important;
-            margin: -25px 0 -15px 0 !important; /* 文字自体の上下余白を潰して詰める */
-            line-height: 1 !important;
-            letter-spacing: -5px;
+            margin: -10px 0 -5px 0 !important; 
+            line-height: 0.85 !important; /* 上下の無駄な余白を極限までカット */
+            letter-spacing: -6px;
         }
         .wbgt-main-force span {
-            font-size: 75px !important; /* ℃もさらに拡大 */
+            font-size: 70px !important;
             font-weight: 900 !important;
-            margin-left: 5px;
+            margin-left: 2px;
         }
         
         .wbgt-status {
-            font-size: 40px; /* ステータスもさらに拡大 */
+            font-size: 38px;
             font-weight: 900;
             background: rgba(0,0,0,0.25);
-            padding: 6px 50px;
+            padding: 4px 45px;
             border-radius: 40px;
             display: inline-block;
             align-self: center;
             letter-spacing: 2px;
+            margin-bottom: 5px;
         }
 
         /* 気象グリッド */
         .weather-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            height: 120px; /* 高さを出して見やすく */
+            gap: 14px;
+            height: 110px; /* 120pxから110pxに調整 */
         }
         .grid-item {
             background: #f7fafc;
@@ -114,23 +117,23 @@
             text-align: center;
         }
         .grid-label {
-            font-size: 20px; /* さらに拡大 */
+            font-size: 18px;
             color: #4a5568;
             font-weight: bold;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .grid-value {
-            font-size: 30px; /* さらに拡大（クッキリ） */
+            font-size: 28px;
             font-weight: 900;
             color: #1a202c;
         }
 
         .footer {
-            font-size: 18px; /* さらに拡大 */
+            font-size: 16px;
             color: #a0aec0;
             text-align: center;
             border-top: 4px solid #edf2f7;
-            height: 45px;
+            height: 35px; /* 45pxから35pxに調整 */
             display: flex;
             align-items: center;
             justify-content: center;
