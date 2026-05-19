@@ -3,210 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>加古川市 WBGT＆気象ダッシュボード</title>
+    <title>加古川市 WBGTダッシュボード</title>
     <style>
-        /* 画面全体：表示器の画面サイズを100%基準にする */
         html, body {
             margin: 0;
             padding: 0;
             width: 100vw;
             height: 100vh;
             background-color: #f4f6f9;
-            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', sans-serif;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
             overflow: hidden !important;
             display: flex;
             justify-content: center;
             align-items: center;
         }
-        
-        /* 全体枠 */
         .widget-box {
-            width: 100vw;
-            height: 100vh;
-            max-width: 690px;
-            max-height: 728px;
+            width: 690px;
+            height: 728px;
             background: #ffffff;
             box-sizing: border-box;
-            padding: 3vh 3vw;
+            padding: 15px 25px; /* 上下の余白を削って文字スペースを確保 */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden !important;
         }
-
-        /* ヘッダーエリア */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #edf2f7;
-            height: 8vh; 
-            box-sizing: border-box;
+            border-bottom: 5px solid #edf2f7;
+            height: 75px; 
         }
         .header h1 {
             margin: 0;
-            font-size: 3.8vw;
-            max-font-size: 24px;
+            font-size: 38px; /* さらに拡大 */
             color: #2d3748;
-            font-weight: 700;
+            font-weight: 900;
         }
         .header .sub {
-            font-size: 2vw;
-            max-font-size: 12px;
+            font-size: 18px; /* さらに拡大 */
             color: #718096;
+            font-weight: bold;
         }
         .weather-icon-txt {
-            font-size: 4.5vw;
-            max-font-size: 28px;
-            font-weight: bold;
+            font-size: 46px; /* さらに拡大 */
+            font-weight: 900;
             color: #3182ce;
         }
 
-        /* メインWBGTエリア */
+        /* 暑さ指数エリア */
         .wbgt-section {
             background: #2ecc71;
             color: white;
-            border-radius: 12px;
-            padding: 1.5vh;
+            border-radius: 24px;
             text-align: center;
-            height: 28vh; /* 数値拡大に合わせて高さをわずかに拡張 */
+            height: 410px; /* 縦幅をさらに拡大 */
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            margin: 5px 0;
         }
         .wbgt-label {
-            font-size: 2.2vw;
-            max-font-size: 14px;
+            font-size: 28px; /* さらに拡大 */
             font-weight: bold;
-            letter-spacing: 1px;
-            opacity: 0.95;
-            margin-bottom: 2px;
+            letter-spacing: 2px;
         }
         
-        /* 🔥 【最重要】数値を限界まで巨大化 */
-        .wbgt-main {
-            font-size: 17vw; /* 12.5vw から 17vw に超巨大化！ */
-            max-font-size: 110px; /* 最大サイズを80pxから110pxへ引き上げ */
-            font-weight: 900;
-            margin: 0;
-            line-height: 0.95;
-            text-shadow: 0 3px 6px rgba(0,0,0,0.15);
-            letter-spacing: -2px; /* 数字の間隔を詰めて視認性アップ */
+        /* 🔥 限界突破：200pxの超ド級巨大数値 */
+        .wbgt-main-force {
+            font-size: 200px !important; 
+            font-weight: 900 !important;
+            margin: -25px 0 -15px 0 !important; /* 文字自体の上下余白を潰して詰める */
+            line-height: 1 !important;
+            letter-spacing: -5px;
         }
-        /* 🔥 「℃」の単位も合わせて大きく強調 */
-        .wbgt-main span {
-            font-size: 7vw; /* 5vw から 7vw に拡大！ */
-            max-font-size: 45px; /* 最大サイズを32pxから45pxへ引き上げ */
-            margin-left: 4px;
-            font-weight: 700;
+        .wbgt-main-force span {
+            font-size: 75px !important; /* ℃もさらに拡大 */
+            font-weight: 900 !important;
+            margin-left: 5px;
         }
         
         .wbgt-status {
-            font-size: 3.2vw;
-            max-font-size: 20px;
-            font-weight: bold;
-            background: rgba(0,0,0,0.2);
-            padding: 4px 18px;
-            border-radius: 30px;
+            font-size: 40px; /* ステータスもさらに拡大 */
+            font-weight: 900;
+            background: rgba(0,0,0,0.25);
+            padding: 6px 50px;
+            border-radius: 40px;
             display: inline-block;
-            margin-top: 6px;
             align-self: center;
+            letter-spacing: 2px;
         }
 
-        /* 気象詳細グリッド */
+        /* 気象グリッド */
         .weather-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 1.2vw;
-            height: 9vh;
-            box-sizing: border-box;
-            margin-top: 1vh;
+            gap: 16px;
+            height: 120px; /* 高さを出して見やすく */
         }
         .grid-item {
             background: #f7fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
+            border: 3px solid #e2e8f0;
+            border-radius: 16px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             text-align: center;
-            padding: 4px 0;
         }
         .grid-label {
-            font-size: 2vw;
-            max-font-size: 12px;
-            color: #718096;
-            margin-bottom: 2px;
+            font-size: 20px; /* さらに拡大 */
+            color: #4a5568;
+            font-weight: bold;
+            margin-bottom: 4px;
         }
         .grid-value {
-            font-size: 2.8vw;
-            max-font-size: 18px;
-            font-weight: 700;
+            font-size: 30px; /* さらに拡大（クッキリ） */
+            font-weight: 900;
             color: #1a202c;
         }
 
-        /* 3時間ごとの予測テーブルエリア */
-        .forecast-section {
-            height: 41vh; /* 上部が大きくなった分、1〜2%だけ縦幅を調整 */
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden !important;
-            margin-top: 1.5vh;
-        }
-        .forecast-title {
-            font-size: 2.2vw;
-            max-font-size: 13px;
-            font-weight: 700;
-            color: #4a5568;
-            margin-bottom: 5px;
-        }
-        .table-wrapper {
-            flex-grow: 1;
-            overflow: hidden !important;
-        }
-        .forecast-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .forecast-table th {
-            background: #f7fafc;
-            color: #718096;
-            font-size: 2vw;
-            max-font-size: 12px;
-            padding: 6px 2px;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        .forecast-table td {
-            padding: 0.9vh 2px; 
-            font-size: 2vw;
-            max-font-size: 12px;
-            color: #4a5568;
-            text-align: center;
-            border-bottom: 1px solid #edf2f7;
-        }
-
-        /* フッター */
         .footer {
-            font-size: 1.8vw;
-            max-font-size: 11px;
+            font-size: 18px; /* さらに拡大 */
             color: #a0aec0;
             text-align: center;
-            border-top: 1px solid #edf2f7;
-            height: 4vh;
-            box-sizing: border-box;
+            border-top: 4px solid #edf2f7;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
 <div class="widget-box">
-    <!-- ヘッダー -->
     <div class="header">
         <div>
             <h1>加古川市 気象ポータル</h1>
@@ -215,65 +149,26 @@
         <div id="weather-text" class="weather-icon-txt">--</div>
     </div>
 
-    <!-- メイン暑さ指数（数値をさらに超巨大化） -->
     <div class="wbgt-section" id="wbgt-card">
         <div class="wbgt-label" id="time-label">現在の暑さ指数 (WBGT)</div>
-        <div class="wbgt-main"><span id="wbgt-num">--.-</span><span>℃</span></div>
+        <div class="wbgt-main-force"><span id="wbgt-num">--.-</span><span>℃</span></div>
         <div class="wbgt-status" id="wbgt-status">取得中...</div>
     </div>
 
-    <!-- 4大気象要素データ -->
     <div class="weather-grid">
-        <div class="grid-item">
-            <div class="grid-label">気温</div>
-            <div class="grid-value" id="cur-temp">--.-℃</div>
-        </div>
-        <div class="grid-item">
-            <div class="grid-label">湿度</div>
-            <div class="grid-value" id="cur-humidity">--%</div>
-        </div>
-        <div class="grid-item">
-            <div class="grid-label">風速</div>
-            <div class="grid-value" id="cur-wind">--.-m/s</div>
-        </div>
-        <div class="grid-item">
-            <div class="grid-label">降水</div>
-            <div class="grid-value" id="cur-pop">--%</div>
-        </div>
+        <div class="grid-item"><div class="grid-label">気温</div><div class="grid-value" id="cur-temp">--.-℃</div></div>
+        <div class="grid-item"><div class="grid-label">湿度</div><div class="grid-value" id="cur-humidity">--%</div></div>
+        <div class="grid-item"><div class="grid-label">風速</div><div class="grid-value" id="cur-wind">--.-m/s</div></div>
+        <div class="grid-item"><div class="grid-label">降水</div><div class="grid-value" id="cur-pop">--%</div></div>
     </div>
 
-    <!-- 今後のタイムライン予測 -->
-    <div class="forecast-section">
-        <div class="forecast-title">⏰ 今後の気象・WBGT予測 (3時間ごと)</div>
-        <div class="table-wrapper">
-            <table class="forecast-table">
-                <thead>
-                    <tr>
-                        <th>時間</th>
-                        <th>天気</th>
-                        <th>気温</th>
-                        <th>湿度</th>
-                        <th>風速</th>
-                        <th>WBGT</th>
-                    </tr>
-                </thead>
-                <tbody id="forecast-tbody">
-                    <!-- JSで動的に追加 -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- フッター -->
-    <div class="footer" id="update-time">
-        Open-Meteo 自動更新
-    </div>
+    <div class="footer" id="update-time">Open-Meteo 自動更新</div>
 </div>
 
 <script>
 const lat = 34.7649;
 const lon = 134.8404;
-const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,precipitation_probability&timezone=Asia%2FTokyo&forecast_days=2`;
+const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,precipitation_probability&timezone=Asia%2FTokyo&forecast_days=1`;
 
 function getWeatherText(code) {
     if (code === 0) return "☀️晴";
@@ -300,28 +195,10 @@ function calcWbgt(temp, humidity) {
     return 0.725 * temp + 0.0368 * humidity + 0.00315 * temp * humidity - 3.2;
 }
 
-function adjustForDevice() {
-    const el = document.querySelectorAll('.header h1, .header .sub, .weather-icon-txt, .wbgt-label, .wbgt-main, .wbgt-status, .grid-label, .grid-value, .forecast-title, .forecast-table th, .forecast-table td, .footer');
-    el.forEach(e => {
-        const max = e.getAttribute('max-font-size');
-        if (max) {
-            const current = parseFloat(window.getComputedStyle(e).fontSize);
-            if (current > parseFloat(max)) {
-                e.style.fontSize = max;
-            }
-        }
-    });
-}
-
 async function updateDashboard() {
     const statusEl = document.getElementById('wbgt-status');
     try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000);
-        
-        const res = await fetch(apiUrl, { signal: controller.signal });
-        clearTimeout(timeoutId);
-        
+        const res = await fetch(apiUrl);
         if (!res.ok) throw new Error();
         const data = await res.json();
         
@@ -330,8 +207,7 @@ async function updateDashboard() {
         
         let currentIndex = 0;
         for (let i = 0; i < hourly.time.length; i++) {
-            const t = new Date(hourly.time[i]);
-            if (t >= now) {
+            if (new Date(hourly.time[i]) >= now) {
                 currentIndex = i;
                 break;
             }
@@ -358,48 +234,15 @@ async function updateDashboard() {
         const timeObj = new Date(hourly.time[currentIndex]);
         document.getElementById('time-label').innerText = `現在（${timeObj.getHours()}:00）の暑さ指数`;
 
-        const tbody = document.getElementById('forecast-tbody');
-        tbody.innerHTML = '';
-
-        let rowCount = 0;
-        for (let i = currentIndex; i < hourly.time.length; i++) {
-            if (rowCount >= 6) break;
-            if ((i - currentIndex) % 3 !== 0) continue;
-
-            const fTime = new Date(hourly.time[i]);
-            const fTemp = hourly.temperature_2m[i];
-            const fHum = hourly.relative_humidity_2m[i];
-            const fWind = (hourly.wind_speed_10m[i] / 3.6).toFixed(1);
-            const fWbgt = calcWbgt(fTemp, fHum).toFixed(1);
-            const fWeather = getWeatherText(hourly.weather_code[i]);
-            const fLevel = getWbgtLevel(fWbgt);
-
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${fTime.getDate()}日${fTime.getHours()}時</td>
-                <td>${fWeather}</td>
-                <td>${fTemp.toFixed(1)}℃</td>
-                <td>${fHum}%</td>
-                <td>${fWind}m</td>
-                <td style="font-weight:bold; color:${fLevel.color}">${fWbgt}℃</td>
-            `;
-            tbody.appendChild(row);
-            rowCount++;
-        }
-
         const rightNow = new Date();
         document.getElementById('update-time').innerText = `同期: ${rightNow.getMonth()+1}/${rightNow.getDate()} ${rightNow.getHours()}:${String(rightNow.getMinutes()).padStart(2,'0')}`;
-        
-        adjustForDevice();
 
     } catch (e) {
         statusEl.innerText = "再試行中...";
-        setTimeout(updateDashboard, 5000);
     }
 }
 
 updateDashboard();
-window.addEventListener('resize', adjustForDevice);
 setInterval(updateDashboard, 600000);
 </script>
 
