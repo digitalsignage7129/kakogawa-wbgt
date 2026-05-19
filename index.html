@@ -52,7 +52,7 @@
             color: #3182ce;
         }
 
-        /* 暑さ指数エリア：文字の縦スペースを限界まで削り、数字の空間を確保 */
+        /* 暑さ指数エリア */
         .wbgt-section {
             background: #2ecc71;
             color: white;
@@ -63,9 +63,8 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 1.5vh 0;
+            padding: 2vh 0;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            position: relative;
         }
         .wbgt-label {
             font-size: 3.5vh;
@@ -75,22 +74,30 @@
             line-height: 1;
         }
         
-        /* 🔥🔥 数字を過去最大の超絶巨大化（画面縦幅の約42%！） 🔥🔥 */
-        .wbgt-main-force {
-            font-size: 42vh !important; 
-            font-weight: 900 !important;
-            margin: -4vh 0 !important; /* 上下の余白を削って限界突破 */
-            line-height: 0.85 !important;
-            letter-spacing: -8px;
+        /* 🔥 外側の箱の余白を削り、文字を縦に並べる設定 */
+        .wbgt-display-area {
             display: flex;
             justify-content: center;
-            align-items: baseline;
+            align-items: center;
+            width: 100%;
+            height: 42vh; /* 数字のために特大の縦幅を確保 */
+            margin: 0;
+            padding: 0;
         }
-        /* 「℃」の単位も数字に合わせて巨大化 */
-        .wbgt-main-force span {
+
+        /* 🔥🔥 JavaScript側から「font-size: 45vh !important」を直接強制注入します 🔥🔥 */
+        #wbgt-num {
+            font-weight: 900 !important;
+            line-height: 0.8 !important;
+            letter-spacing: -10px !important;
+        }
+        /* 単位の「℃」 */
+        .wbgt-unit {
             font-size: 12vh !important;
             font-weight: 900 !important;
             margin-left: 10px;
+            align-self: flex-end;
+            margin-bottom: 4vh;
         }
         
         .wbgt-status {
@@ -162,7 +169,11 @@
 
     <div class="wbgt-section" id="wbgt-card">
         <div class="wbgt-label" id="time-label">現在の暑さ指数 (WBGT)</div>
-        <div class="wbgt-main-force"><span id="wbgt-num">--.-</span><span>℃</span></div>
+        <!-- 構造をシンプルにしてサイズ変更を確実に適用 -->
+        <div class="wbgt-display-area">
+            <span id="wbgt-num">--.-</span>
+            <span class="wbgt-unit">℃</span>
+        </div>
         <div class="wbgt-status" id="wbgt-status">取得中...</div>
     </div>
 
@@ -232,7 +243,12 @@ async function updateDashboard() {
         const curWeather = getWeatherText(hourly.weather_code[currentIndex]);
 
         document.getElementById('weather-text').innerText = curWeather.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD00-\uDFFF]/g, '');
-        document.getElementById('wbgt-num').innerText = curWbgt;
+        
+        // 🛠️ ここでHTMLを書き換えつつ、直接CSSで過去最大の「45vh」を強制注入します
+        const numEl = document.getElementById('wbgt-num');
+        numEl.innerText = curWbgt;
+        numEl.style.setProperty('font-size', '45vh', 'important');
+
         document.getElementById('cur-temp').innerText = `${curTemp.toFixed(1)}℃`;
         document.getElementById('cur-humidity').innerText = `${curHumidity}%`;
         document.getElementById('cur-wind').innerText = `${curWind}m/s`;
