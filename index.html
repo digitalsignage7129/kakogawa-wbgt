@@ -5,140 +5,139 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>加古川市 WBGTダッシュボード</title>
     <style>
+        /* 画面の余白を完全にゼロにし、スクロールバーを絶対に出さない */
         html, body {
             margin: 0;
             padding: 0;
             width: 100vw;
             height: 100vh;
-            background-color: #f4f6f9;
+            background-color: #ffffff;
             font-family: 'Helvetica Neue', Arial, sans-serif;
             overflow: hidden !important;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
         
-        /* 元の理想的な巨大サイズで枠を固定し、画面が狭い場合は全体を自動縮小 */
+        /* 画面の縦横に100%ぴったりくっついて、限界まで広がる箱 */
         .widget-box {
-            width: 690px;
-            height: 728px;
-            background: #ffffff;
+            width: 100vw;
+            height: 100vh;
             box-sizing: border-box;
-            padding: 20px 25px;
+            padding: 2vh 3vw;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden !important;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            
-            /* 🔥 どんな画面でも絶対に見切れず、限界まで大きく表示する魔法のコード */
-            transform-origin: center center;
         }
 
+        /* ヘッダー：縦幅を抑えて文字を大きく */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 5px solid #edf2f7;
-            height: 70px;
+            height: 12vh;
         }
         .header h1 {
             margin: 0;
-            font-size: 38px;
+            font-size: 5vh; /* 画面縦幅基準で大きく */
             color: #2d3748;
             font-weight: 900;
+            line-height: 1.1;
         }
         .header .sub {
-            font-size: 18px;
+            font-size: 2.2vh;
             color: #718096;
             font-weight: bold;
         }
         .weather-icon-txt {
-            font-size: 46px;
+            font-size: 6vh;
             font-weight: 900;
             color: #3182ce;
         }
 
-        /* 暑さ指数エリア */
+        /* 暑さ指数エリア：全体の55%のサイズを確保し、中央の数字を限界まで大きく */
         .wbgt-section {
             background: #2ecc71;
             color: white;
             border-radius: 24px;
             text-align: center;
-            height: 410px; /* しっかりと縦幅を固定 */
+            height: 56vh;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-            margin: 10px 0;
+            justify-content: space-around;
+            padding: 1vh 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         .wbgt-label {
-            font-size: 28px;
+            font-size: 3.8vh;
             font-weight: bold;
             letter-spacing: 2px;
+            margin: 0;
         }
         
-        /* 🔥 超巨大200pxを絶対固定で復活 */
+        /* 🔥 数字を画面縦幅の「26%」まで超巨大化！ */
         .wbgt-main-force {
-            font-size: 200px !important; 
+            font-size: 26vh !important; 
             font-weight: 900 !important;
-            margin: -20px 0 -10px 0 !important; 
-            line-height: 0.9 !important;
-            letter-spacing: -5px;
+            margin: 0 !important; 
+            line-height: 1 !important;
+            letter-spacing: -2px;
         }
         .wbgt-main-force span {
-            font-size: 75px !important;
+            font-size: 9vh !important;
             font-weight: 900 !important;
-            margin-left: 2px;
+            margin-left: 5px;
         }
         
         .wbgt-status {
-            font-size: 40px;
+            font-size: 5.5vh;
             font-weight: 900;
             background: rgba(0,0,0,0.25);
-            padding: 6px 50px;
-            border-radius: 40px;
+            padding: 0.5vh 8vw;
+            border-radius: 50px;
             display: inline-block;
             align-self: center;
             letter-spacing: 2px;
+            margin: 0;
         }
 
-        /* 気象グリッド（文字が半分にならないよう固定） */
+        /* 気象グリッド：下の数字をめちゃくちゃ大きく太くしました */
         .weather-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            height: 115px;
+            gap: 2vw;
+            height: 20vh;
         }
         .grid-item {
             background: #f7fafc;
-            border: 3px solid #e2e8f0;
+            border: 4px solid #e2e8f0;
             border-radius: 16px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             text-align: center;
+            padding: 1vh 0;
         }
         .grid-label {
-            font-size: 20px;
+            font-size: 2.8vh; /* ラベルも大きく */
             color: #4a5568;
             font-weight: bold;
-            margin-bottom: 4px;
+            margin-bottom: 5px;
         }
         .grid-value {
-            font-size: 30px;
+            font-size: 4.8vh; /* 🔥 気温・湿度の数字を過去最大に巨大化 */
             font-weight: 900;
             color: #1a202c;
+            line-height: 1;
         }
 
+        /* フッター：極力細くしてメインエリアに譲る */
         .footer {
-            font-size: 18px;
+            font-size: 2.2vh;
             color: #a0aec0;
             text-align: center;
-            border-top: 4px solid #edf2f7;
-            height: 40px;
+            border-top: 3px solid #edf2f7;
+            height: 5vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -148,7 +147,7 @@
 </head>
 <body>
 
-<div class="widget-box" id="scaler">
+<div class="widget-box">
     <div class="header">
         <div>
             <h1>加古川市 気象ポータル</h1>
@@ -166,7 +165,7 @@
     <div class="weather-grid">
         <div class="grid-item"><div class="grid-label">気温</div><div class="grid-value" id="cur-temp">--.-℃</div></div>
         <div class="grid-item"><div class="grid-label">湿度</div><div class="grid-value" id="cur-humidity">--%</div></div>
-        <div class="grid-item"><div class="grid-label">風速</div><div class="grid-value" id="cur-wind">--.-m/s</div></div>
+        <div class="grid-item"><div class="grid-label">風速</div><div class="grid-value" id="cur-wind">--.-m</div></div>
         <div class="grid-item"><div class="grid-label">降水</div><div class="grid-value" id="cur-pop">--%</div></div>
     </div>
 
@@ -177,21 +176,6 @@
 const lat = 34.7649;
 const lon = 134.8404;
 const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,precipitation_probability&timezone=Asia%2FTokyo&forecast_days=1`;
-
-// 画面サイズに合わせて、比率を保ったまま限界まで拡大縮小させるJavaScript
-function adjustScale() {
-    const scaler = document.getElementById('scaler');
-    const baseWidth = 690;
-    const baseHeight = 728;
-    const winWidth = window.innerWidth;
-    const winHeight = window.innerHeight;
-    
-    // 縦横どちらを基準にしてもはみ出さない最適な倍率を計算
-    const scale = Math.min(winWidth / baseWidth, winHeight / baseHeight);
-    scaler.style.transform = `scale(${scale})`;
-}
-window.addEventListener('resize', adjustScale);
-window.addEventListener('load', adjustScale);
 
 function getWeatherText(code) {
     if (code === 0) return "☀️晴";
@@ -260,8 +244,6 @@ async function updateDashboard() {
         const rightNow = new Date();
         document.getElementById('update-time').innerText = `同期: ${rightNow.getMonth()+1}/${rightNow.getDate()} ${rightNow.getHours()}:${String(rightNow.getMinutes()).padStart(2,'0')}`;
 
-        // データ反映後にサイズを再計算
-        adjustScale();
     } catch (e) {
         statusEl.innerText = "再試行中...";
     }
