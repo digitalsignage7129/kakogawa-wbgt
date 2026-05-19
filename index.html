@@ -74,30 +74,30 @@
             line-height: 1;
         }
         
-        /* 🔥 外側の箱の余白を削り、文字を縦に並べる設定 */
+        /* 数字の表示エリア */
         .wbgt-display-area {
             display: flex;
             justify-content: center;
             align-items: center;
             width: 100%;
-            height: 42vh; /* 数字のために特大の縦幅を確保 */
+            height: 42vh;
             margin: 0;
             padding: 0;
         }
 
-        /* 🔥🔥 JavaScript側から「font-size: 45vh !important」を直接強制注入します 🔥🔥 */
+        /* 太さと文字間隔の調整 */
         #wbgt-num {
             font-weight: 900 !important;
-            line-height: 0.8 !important;
-            letter-spacing: -10px !important;
+            line-height: 0.9 !important;
+            letter-spacing: -6px !important;
         }
-        /* 単位の「℃」 */
+        /* 単位の「℃」のサイズも微調整 */
         .wbgt-unit {
-            font-size: 12vh !important;
+            font-size: 9vh !important;
             font-weight: 900 !important;
             margin-left: 10px;
             align-self: flex-end;
-            margin-bottom: 4vh;
+            margin-bottom: 5vh;
         }
         
         .wbgt-status {
@@ -169,7 +169,6 @@
 
     <div class="wbgt-section" id="wbgt-card">
         <div class="wbgt-label" id="time-label">現在の暑さ指数 (WBGT)</div>
-        <!-- 構造をシンプルにしてサイズ変更を確実に適用 -->
         <div class="wbgt-display-area">
             <span id="wbgt-num">--.-</span>
             <span class="wbgt-unit">℃</span>
@@ -244,10 +243,10 @@ async function updateDashboard() {
 
         document.getElementById('weather-text').innerText = curWeather.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD00-\uDFFF]/g, '');
         
-        // 🛠️ ここでHTMLを書き換えつつ、直接CSSで過去最大の「45vh」を強制注入します
+        // 🛠️ 完璧な一回り小さいサイズ（32vh）に微調整
         const numEl = document.getElementById('wbgt-num');
         numEl.innerText = curWbgt;
-        numEl.style.setProperty('font-size', '45vh', 'important');
+        numEl.style.setProperty('font-size', '32vh', 'important');
 
         document.getElementById('cur-temp').innerText = `${curTemp.toFixed(1)}℃`;
         document.getElementById('cur-humidity').innerText = `${curHumidity}%`;
